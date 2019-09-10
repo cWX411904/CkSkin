@@ -1,9 +1,13 @@
 package com.ck.skin_core;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import com.ck.skin_core.utils.SkinThemeUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -36,8 +40,13 @@ public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
     //属性处理类
     SkinAttribute skinAttribute = null;
 
-    public SkinLayoutFactory() {
-        skinAttribute = new SkinAttribute();
+    Activity activity;
+
+
+
+    public SkinLayoutFactory(Activity activity, Typeface skinTypeface) {
+        this.activity = activity;
+        skinAttribute = new SkinAttribute(skinTypeface);
     }
 
     @Override
@@ -105,6 +114,13 @@ public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
     @Override
     public void update(Observable o, Object arg) {
         //开始更换皮肤
+
+        Typeface skinTypeface = SkinThemeUtils.getSkinTypeface(activity);
+
+        SkinThemeUtils.updateStatusBar(activity);
+
+        skinAttribute.setTypeface(skinTypeface);
+
         skinAttribute.applySkin();
     }
 }

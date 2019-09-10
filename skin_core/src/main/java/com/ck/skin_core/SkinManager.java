@@ -1,5 +1,6 @@
 package com.ck.skin_core;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -82,5 +83,9 @@ public class SkinManager extends Observable {
 
     public static SkinManager getInstance() {
         return instance;
+    }
+
+    public void updateSkin(Activity activity) {
+        skinActivityLifecycle.updateSkin(activity);
     }
 }

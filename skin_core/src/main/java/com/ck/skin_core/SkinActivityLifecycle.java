@@ -2,10 +2,13 @@ package com.ck.skin_core;
 
 import android.app.Activity;
 import android.app.Application;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.util.ArrayMap;
 import android.view.LayoutInflater;
+
+import com.ck.skin_core.utils.SkinThemeUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -16,6 +19,18 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        /**
+         * 更新状顶部态栏StatusBar
+         */
+        SkinThemeUtils.updateStatusBar(activity);
+
+        /**
+         * 字体
+         */
+        Typeface skinTypeface = SkinThemeUtils.getSkinTypeface(activity);
+
+
 
         //获得Activity的布局加载器
         LayoutInflater layoutInflater = LayoutInflater.from(activity);
@@ -30,7 +45,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
         } catch (Exception e) {
             e.printStackTrace();
         }
-        SkinLayoutFactory skinLayoutFactory = new SkinLayoutFactory();
+        SkinLayoutFactory skinLayoutFactory = new SkinLayoutFactory(activity, skinTypeface);
         LayoutInflaterCompat.setFactory2(layoutInflater, skinLayoutFactory);
         mLayoutFactory.put(activity, skinLayoutFactory);
         SkinManager.getInstance().addObserver(skinLayoutFactory);
@@ -65,5 +80,9 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
     public void onActivityDestroyed(Activity activity) {
         SkinLayoutFactory skinLayoutFactory = mLayoutFactory.remove(activity);
         SkinManager.getInstance().deleteObserver(skinLayoutFactory);
+    }
+
+    public void updateSkin(Activity activity) {
+        mLayoutFactory.get(activity).update(null, null);
     }
 }

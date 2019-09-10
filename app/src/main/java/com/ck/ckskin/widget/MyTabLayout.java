@@ -1,11 +1,14 @@
 package com.ck.ckskin.widget;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
 
 import com.ck.ckskin.R;
+import com.ck.skin_core.SkinViewSupport;
+import com.ck.skin_core.utils.SkinResource;
 
 
 /**
@@ -13,7 +16,7 @@ import com.ck.ckskin.R;
  * @date 2018/3/12
  */
 
-public class MyTabLayout extends TabLayout  {
+public class MyTabLayout extends TabLayout implements SkinViewSupport {
     int tabIndicatorColorResId;
     int tabTextColorResId;
 
@@ -32,6 +35,16 @@ public class MyTabLayout extends TabLayout  {
         tabIndicatorColorResId = a.getResourceId(R.styleable.TabLayout_tabIndicatorColor, 0);
         tabTextColorResId = a.getResourceId(R.styleable.TabLayout_tabTextColor, 0);
         a.recycle();
+    }
+
+    @Override
+    public void applySkin() {
+
+        int tabIndicatorColor = SkinResource.getInstance().getColor(tabIndicatorColorResId);
+        setSelectedTabIndicatorColor(tabIndicatorColor);
+
+        ColorStateList colorStateList = SkinResource.getInstance().getColorStateList(tabTextColorResId);
+        setTabTextColors(colorStateList);
     }
 
 //    @Override

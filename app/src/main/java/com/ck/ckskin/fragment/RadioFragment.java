@@ -23,5 +23,10 @@ public class RadioFragment extends Fragment {
             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_radio, container, false);
     }
+
+    @Override
+    public LayoutInflater onGetLayoutInflater(Bundle savedInstanceState) {
+        return super.onGetLayoutInflater(savedInstanceState);
+    }
 }
 

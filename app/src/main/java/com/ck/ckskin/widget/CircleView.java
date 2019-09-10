@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.ck.ckskin.R;
+import com.ck.skin_core.SkinViewSupport;
+import com.ck.skin_core.utils.SkinResource;
 
 
 /**
@@ -17,7 +19,7 @@ import com.ck.ckskin.R;
  * @date 2018/3/12
  */
 
-public class CircleView extends View {
+public class CircleView extends View implements SkinViewSupport {
     private AttributeSet attrs;
     //画笔
     private Paint mTextPain;
@@ -68,6 +70,13 @@ public class CircleView extends View {
     public void setCorcleColor(@ColorInt int color) {
         mTextPain.setColor(color);
         invalidate();
+    }
+
+    @Override
+    public void applySkin() {
+        //根据resourceId获得皮肤包中的color
+        int color = SkinResource.getInstance().getColor(corcleColorResId);
+        setCorcleColor(color);
     }
 
 

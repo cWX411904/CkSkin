@@ -1,8 +1,8 @@
 package com.ck.skin_core;
 
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,7 +28,17 @@ public class SkinAttribute {
         mAttributes.add("drawableBottom");
     }
 
+    private Typeface typeface;
+
     List<SkinView> mSkinViews = new ArrayList<>();
+
+    public SkinAttribute(Typeface skinTypeface) {
+        this.typeface = skinTypeface;
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
+    }
 
     /**
      *
@@ -70,11 +80,10 @@ public class SkinAttribute {
             }
         }
 
-        if (!skinPairs.isEmpty()) {
-
+        if (!skinPairs.isEmpty() || view instanceof TextView || view instanceof SkinViewSupport) {
             //将view与之对应的可以动态替换的属性集合 放入集合中
             SkinView skinView = new SkinView(view, skinPairs);
-            skinView.applySkin();
+            skinView.applySkin(typeface);
             mSkinViews.add(skinView);
         }
     }
@@ -84,7 +93,7 @@ public class SkinAttribute {
      */
     public void applySkin() {
         for (SkinView mSkinView : mSkinViews) {
-            mSkinView.applySkin();
+            mSkinView.applySkin(typeface);
         }
     }
 
@@ -97,7 +106,9 @@ public class SkinAttribute {
             this.skinPairs = skinPairs;
         }
 
-        public void applySkin() {
+        public void applySkin(Typeface typeface) {
+            applySkinTypeface(typeface);
+            applySkinViewSupport();
             for (SkinPair skinPair : skinPairs) {
                 Drawable left = null, top = null, right = null, bottom = null;
                 switch (skinPair.attributeName) {
@@ -134,12 +145,28 @@ public class SkinAttribute {
                     case "drawableBottom":
                         bottom = SkinResource.getInstance().getDrawable(skinPair.resId);
                         break;
+                    case "skinTypeface":
+                        Typeface typeface1 = SkinResource.getInstance().getTypeface(skinPair.resId);
+                        applySkinTypeface(typeface1);
+                        break;
                     default:
                         break;
                 }
                 if (null != left || null != right || null != top || null != bottom) {
                     ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
                 }
+            }
+        }
+
+        private void applySkinViewSupport() {
+            if (view instanceof SkinViewSupport) {
+                ((SkinViewSupport) view).applySkin();
+            }
+        }
+
+        private void applySkinTypeface(Typeface typeface) {
+            if (view instanceof TextView) {
+                ((TextView)view).setTypeface(typeface);
             }
         }
     }

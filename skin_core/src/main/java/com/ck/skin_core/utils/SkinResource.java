@@ -124,6 +124,11 @@ public class SkinResource {
         return null;
     }
 
+    /**
+     * 根据ID获得字体
+     * @param resId
+     * @return
+     */
     public Typeface getTypeface(int resId) {
         String skinTypefacePath = getString(resId);
         if (TextUtils.isEmpty(skinTypefacePath)) {
